@@ -2,235 +2,198 @@ instance0
 JOBS : 5
 MACHINES : 6
 JOB_SECTION
-
 Job1
 Operation1 : (M0,147) (M1,123) (M2,145)
 Operation2 : (M3,140) (M1,130)
 Operation3 : (M3,150) (M4,160)
-
 Job2
 Operation1 : (M0,214) (M2,150)
 Operation2 : (M2,87) (M1,66)
 Operation3 : (M4,178) (M5,95)
-
 Job3
 Operation1 : (M0,87) (M1,62)
 Operation2 : (M2,180) (M3,105)
 Operation3 : (M3,190) (M4,100) (M5,153)
-
 Job4
 Operation1 : (M0,87) (M1,65)
 Operation2 : (M4,173)
 Operation3 : (M3,145) (M5,136)
-
 Job5
 Operation1 : (M1,123) (M2,145) (M0,128)
 Operation2 : (M2,86) (M3,65) (M4,47)
 Operation3 : (M4,110) (M5,85)
-
 makespan : 468
-
+lower bound : 403
+converged : 468, time : 0.100s
 +++++++++++++++++++++++++++++
 instance 1
 JOBS : 5
 MACHINES : 7
-
 JOB_SECTION
 Job 1
 Operation 1 : (M0,147) (M1,123) (M2,145)
 Operation 2 : (M3,140) (M1,130) (M0,123)
 Operation 3 : (M3,150) (M4,160) (M6,200)
-
 Job 2
 Operation 1 : (M0,214) (M2,150)
 Operation 2 : (M2,87) (M1,66) (M3,99)
 Operation 3 : (M4,178) (M5,95) (M6,150)
-
 Job 3
 Operation 1 : (M0,87) (M1,62)
 Operation 2 : (M6,145) (M2,180) (M3,105)
 Operation 3 : (M3,190) (M4,100) (M5,153)
-
 Job 4
 Operation 1 : (M0,87) (M1,65)
 Operation 2 : (M2,250) (M4,173)
 Operation 3 : (M3,145) (M5,136)
-
 Job 5
 Operation 1 : (M1,123) (M2,145) (M0,128)
 Operation 2 : (M2,86) (M3,65) (M4,47)
 Operation 3 : (M4,110) (M5,85)
-
-makespan : 458
-
+makespan : 448
+lower bound : 396
+converged : 448, time : 0.100s
 +++++++++++++++++++++++++++++
 instance 2
 JOBS : 6
 MACHINES : 7
-
 JOB_SECTION
 Job 1
 Operation 1 : (M0,147) (M1,123) (M2,145)
 Operation 2 : (M3,140) (M1,130) (M0,123)
 Operation 3 : (M3,150) (M4,160) (M6,200)
-
 Job 2
 Operation 1 : (M0,214) (M2,150)
 Operation 2 : (M2,87) (M1,66) (M3,99)
 Operation 3 : (M4,178) (M5,95) (M6,150)
-
 Job 3
 Operation 1 : (M0,87) (M1,62)
 Operation 2 : (M6,145) (M2,180) (M3,105)
 Operation 3 : (M3,190) (M4,100) (M5,153)
-
 Job 4
 Operation 1 : (M0,87) (M1,65)
 Operation 2 : (M2,250) (M4,173)
 Operation 3 : (M3,145) (M5,136)
-
 Job 5
 Operation 1 : (M1,123) (M2,145) (M0,128)
 Operation 2 : (M2,86) (M3,65) (M4,47)
 Operation 3 : (M4,110) (M5,85)
-
 Job 6
 Operation 1 : (M1,145) (M2,320) (M3,154)
 Operation 2 : (M3,150) (M2,123) (M4,192)
 Operation 3 : (M4,120) (M5,240) (M6,180)
-
-makespan : 488
-
+makespan : 466
+lower bound : 396
+converged : 466, time : 0.137s
 +++++++++++++++++++++++++++++
 instance 3
 JOBS : 7
 MACHINES : 7
-
 JOB_SECTION
 Job 1
 Operation 1 : (M0,247) (M1,223)
 Operation 2 : (M3,140) (M1,130) (M6,123)
 Operation 3 : (M3,150) (M4,160) (M6,200)
-
 Job 2
 Operation 1 : (M0,214) (M2,150)
 Operation 2 : (M2,87) (M1,66) (M3,99)
 Operation 3 : (M4,178) (M5,95) (M6,150)
-
 Job 3
 Operation 1 : (M0,87) (M1,62)
 Operation 2 : (M6,145) (M2,180) (M3,105)
 Operation 3 : (M3,190) (M4,100) (M5,153)
-
 Job 4
 Operation 1 : (M0,87) (M1,65)
 Operation 2 : (M2,250) (M4,173)
 Operation 3 : (M3,145) (M5,136)
-
 Job 5
 Operation 1 : (M1,123) (M2,145) (M0,128)
 Operation 2 : (M6,86) (M3,65) (M4,47)
 Operation 3 : (M4,110) (M5,85)
-
 Job 6
 Operation 1 : (M1,145) (M2,320) (M3,154)
 Operation 2 : (M3,150) (M2,123) (M4,192)
 Operation 3 : (M4,120) (M5,240) (M6,180)
-
 Job 7
 Operation 1 : (M2,145) (M1,210) (M0,157)
 Operation 2 : (M2,124) (M3,168) (M4,154)
 Operation 3 : (M4,145) (M5,165) (M6,178)
-
-makespan : 568
-
+makespan : 554
+lower bound : 496
+converged : 554, time : 0.172s
 +++++++++++++++++++++++++++++
 instance 4
 JOBS : 7
 MACHINES : 7
-
 JOB_SECTION
 Job 1
 Operation 1 : (M0,247) (M1,223) (M2,100)
 Operation 2 : (M3,140) (M1,130) (M6,123)
 Operation 3 : (M3,150) (M4,160) (M6,200)
-
 Job 2
 Operation 1 : (M0,214) (M2,150)
 Operation 2 : (M2,87) (M1,66)
 Operation 3 : (M4,178) (M5,95) (M6,150)
-
 Job 3
 Operation 1 : (M0,87) (M1,62)
 Operation 2 : (M6,145) (M2,180) (M3,105)
 Operation 3 : (M3,190) (M4,100) (M5,153)
-
 Job 4
 Operation 1 : (M0,87) (M1,65)
 Operation 2 : (M2,250) (M4,173)
 Operation 3 : (M3,145) (M5,136)
-
 Job 5
 Operation 1 : (M1,123) (M2,145) (M0,128)
 Operation 2 : (M6,86) (M3,65) (M4,47)
 Operation 3 : (M4,110) (M5,85) (M1,100)
-
 Job 6
 Operation 1 : (M1,145) (M2,320) (M3,154)
 Operation 2 : (M3,150) (M2,123) (M4,192)
 Operation 3 : (M4,120) (M5,240) (M6,180)
-
 Job 7
 Operation 1 : (M2,145) (M1,157)
 Operation 2 : (M2,124) (M4,168)
 Operation 3 : (M4,145) (M5,165) (M6,178)
-
-makespan : 550
-
+makespan : 514
+lower bound : 414
+converged : 514, time : 0.222s
 +++++++++++++++++++++++++++++
 instance 5
 JOBS : 8
 MACHINES : 7
-
 JOB_SECTION
 Job 1
 Operation 1 : (M0,247) (M1,223) (M2,100)
 Operation 2 : (M3,140) (M1,130) (M6,123)
 Operation 3 : (M3,150) (M4,160) (M6,200)
-
 Job 2
 Operation 1 : (M0,214) (M2,150)
 Operation 2 : (M2,87) (M1,66)
 Operation 3 : (M4,178) (M5,95) (M6,150)
-
 Job 3
 Operation 1 : (M0,87) (M1,62)
 Operation 2 : (M6,145) (M2,180) (M3,105)
 Operation 3 : (M3,190) (M4,100) (M5,153)
-
 Job 4
 Operation 1 : (M0,87) (M1,65)
 Operation 2 : (M2,250) (M4,173)
 Operation 3 : (M3,145) (M5,136)
-
 Job 5
 Operation 1 : (M1,123) (M2,145) (M0,128)
 Operation 2 : (M6,86) (M3,65) (M4,47)
 Operation 3 : (M4,110) (M5,85) (M1,100)
-
 Job 6
 Operation 1 : (M1,145) (M2,320) (M3,154)
 Operation 2 : (M3,150) (M2,123) (M4,192)
 Operation 3 : (M4,120) (M5,240) (M6,180)
-
 Job 7
 Operation 1 : (M2,145) (M1,157)
 Operation 2 : (M2,124) (M4,168)
 Operation 3 : (M4,145) (M5,165) (M6,178)
-
 Job 8
 Operation 1 : (M3,245) (M2,257)
 Operation 2 : (M5,224) (M4,268)
 Operation 3 : (M4,145) (M5,165) (M6,178)
-
-makespan : 681
+makespan : 634
+lower bound : 614
+converged : 634, time : 0.211s

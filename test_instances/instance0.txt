@@ -1,0 +1,28 @@
+JOBS : 5
+MACHINES : 6
+JOB_SECTION
+
+Job1
+Operation1 : (M0,147) (M1,123) (M2,145)
+Operation2 : (M3,140) (M1,130)
+Operation3 : (M3,150) (M4,160)
+
+Job2
+Operation1 : (M0,214) (M2,150)
+Operation2 : (M2,87) (M1,66)
+Operation3 : (M4,178) (M5,95)
+
+Job3
+Operation1 : (M0,87) (M1,62)
+Operation2 : (M2,180) (M3,105)
+Operation3 : (M3,190) (M4,100) (M5,153)
+
+Job4
+Operation1 : (M0,87) (M1,65)
+Operation2 : (M4,173)
+Operation3 : (M3,145) (M5,136)
+
+Job5
+Operation1 : (M1,123) (M2,145) (M0,128)
+Operation2 : (M2,86) (M3,65) (M4,47)
+Operation3 : (M4,110) (M5,85)

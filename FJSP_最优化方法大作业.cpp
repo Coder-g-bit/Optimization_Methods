@@ -1,5 +1,6 @@
 // 基于极限完工时间最小化的初始化方式实现FJSP问题的模拟退火算法
 #include <bits/stdc++.h>
+#include <time.h>
 using namespace std;
 
 // 记录机器选项
@@ -34,6 +35,7 @@ struct Solution
 {
     vector<int> OS;         // 工序序列（job id）
     vector<vector<int>> MS; // 每道工序选择的机器（索引）
+    vector<int> op_counter; // 每个job的当前工序计数（用于快速定位）
     int makespan;
 };
 
@@ -132,49 +134,65 @@ Instance readInstance(istream &in)
     return inst;
 }
 
-// 解码 + Makespan计算（使用Giffler–Thompson-like 解码）
-// 传参：实例数据，解结构
-int decode(const Instance &inst, Solution &sol)
+struct OperationDetail
+{
+    int job_id;
+    int op_id;
+    int machine;
+    int start_time;
+    int end_time;
+};
+
+int decode(const Instance &inst, const Solution &sol, vector<OperationDetail> &details)
 {
     int J = inst.num_jobs;
+    int n = sol.OS.size();
 
-    vector<int> job_ptr(J, 0); // 每个job当前工序
-    vector<int> job_end(J, 0); // job时间
-    vector<int> machine_end(inst.num_machines, 0);
+    vector<int> job_end(J, 0), machine_end(inst.num_machines, 0);
+    details.clear();
 
-    for (int i = 0; i < sol.OS.size(); i++)
+    for (int i = 0; i < n; i++)
     {
         int j = sol.OS[i];
-        int op_id = job_ptr[j];
+        int op_id = sol.op_counter[i];
 
-        auto &op = inst.jobs[j].operations[op_id];
-        int m_idx = sol.MS[j][op_id]; // 机器选择（在候选列表中的index）
-
-        int machine = op.machines[m_idx].machine_id;
-        int pt = op.machines[m_idx].proc_time;
+        const auto &machines = inst.jobs[j].operations[op_id].machines;
+        int m_idx = sol.MS[j][op_id];
+        int machine = machines[m_idx].machine_id;
+        int pt = machines[m_idx].proc_time;
 
         int start = max(job_end[j], machine_end[machine]);
         int finish = start + pt;
-
         job_end[j] = finish;
         machine_end[machine] = finish;
 
-        job_ptr[j]++;
+        OperationDetail od;
+        od.job_id = j;
+        od.op_id = op_id;
+        od.machine = machine;
+        od.start_time = start;
+        od.end_time = finish;
+        details.push_back(od);
     }
 
     return *max_element(job_end.begin(), job_end.end());
 }
 
-// 生成初始解
-// 传参：实例数据
+int decode(const Instance &inst, const Solution &sol)
+{
+    vector<OperationDetail> details;
+    return decode(inst, sol, details);
+}
+
+void rebuildOpCounter(const Solution &sol, vector<int> &op_counter);
+
 Solution initSolution(const Instance &inst)
 {
     Solution sol;
 
-    // 构造OS
     for (int j = 0; j < inst.num_jobs; j++)
     {
-        for (int k = 0; k < inst.jobs[j].operations.size(); k++)
+        for (int k = 0; k < (int)inst.jobs[j].operations.size(); k++)
         {
             sol.OS.push_back(j);
         }
@@ -182,25 +200,16 @@ Solution initSolution(const Instance &inst)
 
     random_shuffle(sol.OS.begin(), sol.OS.end());
 
-    // 构造MS（随机选机器）
-    for (int i = 0; i < sol.OS.size(); i++)
+    rebuildOpCounter(sol, sol.op_counter);
+
+    sol.MS.resize(inst.num_jobs);
+    for (int j = 0; j < inst.num_jobs; j++)
     {
-        int j = sol.OS[i];
-        int op_id = count(sol.OS.begin(), sol.OS.begin() + i, j);
-
-        int sz = inst.jobs[j].operations[op_id].machines.size();
-        sol.MS.resize(inst.num_jobs);
-
-        for (int j = 0; j < inst.num_jobs; j++)
+        int ops = inst.jobs[j].operations.size();
+        sol.MS[j].resize(ops);
+        for (int o = 0; o < ops; o++)
         {
-            int ops = inst.jobs[j].operations.size();
-            sol.MS[j].resize(ops);
-
-            for (int o = 0; o < ops; o++)
-            {
-                int sz = inst.jobs[j].operations[o].machines.size();
-                sol.MS[j][o] = rand() % sz;
-            }
+            sol.MS[j][o] = rand() % inst.jobs[j].operations[o].machines.size();
         }
     }
 
@@ -208,18 +217,27 @@ Solution initSolution(const Instance &inst)
     return sol;
 }
 
-// 交换操作
-// 传参：当前解
+void rebuildOpCounter(const Solution &sol, vector<int> &op_counter)
+{
+    op_counter.assign(sol.OS.size(), 0);
+    vector<int> job_occur(sol.OS.size(), 0);
+    for (int i = 0; i < (int)sol.OS.size(); i++)
+    {
+        int j = sol.OS[i];
+        op_counter[i] = job_occur[j];
+        job_occur[j]++;
+    }
+}
+
 void swapOp(Solution &sol)
 {
     int n = sol.OS.size();
     int i = rand() % n;
     int j = rand() % n;
     swap(sol.OS[i], sol.OS[j]);
+    rebuildOpCounter(sol, sol.op_counter);
 }
 
-// 插入操作
-// 传参：当前解
 void insertOp(Solution &sol)
 {
     int n = sol.OS.size();
@@ -233,16 +251,14 @@ void insertOp(Solution &sol)
 
     sol.OS.erase(sol.OS.begin() + i);
     sol.OS.insert(sol.OS.begin() + j, job);
+    rebuildOpCounter(sol, sol.op_counter);
 }
 
-// 修改机器选择
-// 传参：实例数据，当前解
 void changeMachine(const Instance &inst, Solution &sol)
 {
-    int i = rand() % sol.OS.size();
-
-    int j = sol.OS[i];
-    int op_id = count(sol.OS.begin(), sol.OS.begin() + i, j);
+    int pos = rand() % sol.OS.size();
+    int j = sol.OS[pos];
+    int op_id = sol.op_counter[pos];
 
     int sz = inst.jobs[j].operations[op_id].machines.size();
     sol.MS[j][op_id] = rand() % sz;
@@ -327,21 +343,58 @@ Solution simulatedAnnealing(const Instance &inst)
     return best;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
+    bool gen_schedule = (argc > 1 && string(argv[1]) == "--schedule");
+
     freopen("instance.in", "r", stdin);
-    freopen("instance.out", "w", stdout);
-    Instance inst = readInstance(cin);
-    cout << "Jobs = " << inst.num_jobs << endl;
-    cout << "Machines = " << inst.num_machines << endl;
-    int best = INT_MAX;
-    for(int i=0;i<10;++i){
-        Solution s = simulatedAnnealing(inst);
-        best = min(best, s.makespan);
+    if (gen_schedule)
+    {
+        freopen("schedule.txt", "w", stdout);
+        Instance inst = readInstance(cin);
+        Solution bestSol = simulatedAnnealing(inst);
+        vector<OperationDetail> details;
+        int makespan = decode(inst, bestSol, details);
+        cout << inst.num_jobs << " " << inst.num_machines << " " << makespan << endl;
+        for (const auto &d : details)
+        {
+            cout << d.job_id << " " << d.op_id << " " << d.machine << " " << d.start_time << " " << d.end_time << endl;
+        }
     }
-    cout << "Best makespan: " << best << "\n";
+    else
+    {
+        freopen("instance.out", "w", stdout);
+        Instance inst = readInstance(cin);
+        cout << "Jobs = " << inst.num_jobs << endl;
+        cout << "Machines = " << inst.num_machines << endl;
+
+        const int RUNS = 20;
+        vector<int> results(RUNS);
+        double total_time = 0;
+
+        for (int i = 0; i < RUNS; i++)
+        {
+            clock_t start = clock();
+            Solution s = simulatedAnnealing(inst);
+            clock_t end = clock();
+            results[i] = s.makespan;
+            total_time += (double)(end - start) / CLOCKS_PER_SEC;
+        }
+
+        sort(results.begin(), results.end());
+        int best = results[0];
+        int worst = results[RUNS - 1];
+
+        cout << "Best makespan: " << best << endl;
+        cout << "Worst makespan: " << worst << endl;
+        cout << "Average makespan: " << accumulate(results.begin(), results.end(), 0) / RUNS << endl;
+        cout << "Converged value: " << best << endl;
+        cout << "Convergence count: " << count(results.begin(), results.end(), best) << "/" << RUNS << endl;
+        cout << "Average time: " << fixed << setprecision(3) << total_time / RUNS << "s" << endl;
+    }
+
     return 0;
 }
