@@ -25,6 +25,9 @@ def read_schedule(filename):
         return num_jobs, num_machines, makespan, operations
 
 def draw_gantt_chart(filename, output_name):
+    import os
+    if not os.path.exists(filename):
+        filename = "result_charts/" + filename
     num_jobs, num_machines, makespan, operations = read_schedule(filename)
     
     colors = plt.cm.tab20(np.linspace(0, 1, num_jobs))
@@ -59,8 +62,8 @@ def draw_gantt_chart(filename, output_name):
 
 if __name__ == "__main__":
     for i in range(6):
-        input_file = f"gantt_instance{i}.txt"
-        output_file = f"gantt_instance{i}.png"
+        input_file = f"result_charts/gantt_instance{i}.txt"
+        output_file = f"result_charts/gantt_instance{i}.png"
         try:
             draw_gantt_chart(input_file, output_file)
         except Exception as e:

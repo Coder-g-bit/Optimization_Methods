@@ -351,11 +351,23 @@ int main(int argc, char* argv[])
     bool gen_schedule = (argc > 1 && string(argv[1]) == "--schedule");
 
     freopen("instance.in", "r", stdin);
+    Instance inst = readInstance(cin);
+
     if (gen_schedule)
     {
         freopen("schedule.txt", "w", stdout);
-        Instance inst = readInstance(cin);
-        Solution bestSol = simulatedAnnealing(inst);
+        const int RUNS = 20;
+        Solution bestSol;
+        int bestMs = INT_MAX;
+        for (int i = 0; i < RUNS; i++)
+        {
+            Solution s = simulatedAnnealing(inst);
+            if (s.makespan < bestMs)
+            {
+                bestMs = s.makespan;
+                bestSol = s;
+            }
+        }
         vector<OperationDetail> details;
         int makespan = decode(inst, bestSol, details);
         cout << inst.num_jobs << " " << inst.num_machines << " " << makespan << endl;
@@ -367,10 +379,6 @@ int main(int argc, char* argv[])
     else
     {
         freopen("instance.out", "w", stdout);
-        Instance inst = readInstance(cin);
-        cout << "Jobs = " << inst.num_jobs << endl;
-        cout << "Machines = " << inst.num_machines << endl;
-
         const int RUNS = 20;
         vector<int> results(RUNS);
         double total_time = 0;
@@ -388,6 +396,8 @@ int main(int argc, char* argv[])
         int best = results[0];
         int worst = results[RUNS - 1];
 
+        cout << "Jobs = " << inst.num_jobs << endl;
+        cout << "Machines = " << inst.num_machines << endl;
         cout << "Best makespan: " << best << endl;
         cout << "Worst makespan: " << worst << endl;
         cout << "Average makespan: " << accumulate(results.begin(), results.end(), 0) / RUNS << endl;
