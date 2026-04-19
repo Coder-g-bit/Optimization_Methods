@@ -1,8 +1,8 @@
 Jobs = 5
-Machines = 7
-Best makespan: 448
-Worst makespan: 461
-Average makespan: 453
-Converged value: 448
-Convergence count: 9/20
-Average time: 0.145s
+Machines = 6
+Best makespan: 468
+Worst makespan: 477
+Average makespan: 468
+Converged value: 468
+Convergence count: 19/20
+Average time: 0.076s
